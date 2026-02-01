@@ -1,0 +1,42 @@
+from sentence_transformers import SentenceTransformer, util
+
+# Load a pre-trained BERT model (all-MiniLM-L6-v2 is fast and accurate)
+model = SentenceTransformer('all-MiniLM-L6-v2')
+
+def entity_ranking(article_description, entity_list):
+    # Check if there are actually entities to rank
+    if not entity_list:
+        return []
+
+    # remove repeated entities
+    unique_entities = list(set(entity_list))
+
+    # Encode the article and all entities into BERT vectors
+    # BERT can only compare with vectors
+    article_vector = model.encode(article_description, convert_to_tensor=True)
+    entity_vectors = model.encode(unique_entities, convert_to_tensor=True)
+
+    # Compare each entity to the full article
+    # Measures how relevant an entity is by giving it a score from 0.0 (Irrelevant) to 1.0 (relevant)
+    cosine_scores = util.cos_sim(entity_vectors, article_vector)
+
+    # Build the list of results
+    final_rankings = []
+    for index, entity_name in enumerate(unique_entities):
+        # The order in cosine_scores exactly matches the order in unique_entities
+        importance_score = cosine_scores[index].item()
+        final_rankings.append({
+            "name": entity_name,
+            "score": importance_score
+        })
+
+    # Sort by highest score first and keep the top 5
+    final_rankings.sort(key=lambda x: x['score'], reverse=True)
+
+    # Print results for checking
+    for entity in final_rankings[:5]:
+        print(f"Entity: {entity['name']} | Importance: {entity['score']:.4f}")
+
+    return final_rankings[:5]
+
+    
