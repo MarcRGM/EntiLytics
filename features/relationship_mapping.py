@@ -3,6 +3,7 @@ import nltk
 from pyvis.network import Network
 from itertools import combinations
 from nltk.tokenize import sent_tokenize # Split articles by sentence rather than using split('.')
+import uuid
 
 # nltk requirement
 try:
@@ -45,25 +46,36 @@ def mapping(article, entities):
                     graph.add_edge(u, v, weight=1, evidence=[clean_s])
 
     # Interactive Visualization using PyVis
-    net = Network(height="100vh", width="100%", bgcolor="#FADA7A", font_color="#1C6EA4")
+    net = Network(height="500px", width="100%", bgcolor="#FADA7A", font_color="#1C6EA4", notebook=True)
+    # net.from_nx(graph) automatic creation with default style 
+
+    # Add nodes and the edge connecting them
+    # (ID, Visible text, Shows when hovered, Color of the circle)
+    for entity in entities:
+        net.add_node(entity, label=entity, title=entity, color="white")
 
     # Iterate through the NetworkX edges to build the Pyvis map
     for u, v, data in graph.edges(data=True): # True gives the custom attributes from graph
         # title is an attribute Pyvis uses for the hover tooltip
         hover_text = "Found in:\n" + "\n".join(data['evidence'])
         
-        # Add nodes and the edge connecting them
-        # (ID, Visible text, Shows when hovered, Color of the circle)
-        net.add_node(u, label=u, title=u, color="white")
-        net.add_node(v, label=v, title=v, color="white")
         # (Nodes to connect, line thickness, Shows when hovered, Color of the line)
         net.add_edge(u, v, 
                     value=data['weight'],
                     title=hover_text,      
                     color="#1C6EA4")
 
-    # Create an HTML 
-    net.save_graph("entity_connection_map.html")
+    # Generate the html string
+    html_string = net.generate_html() 
+
+    # Give unique ID to each graphs
+    unique_id = f"graph_{uuid.uuid4().hex[:8]}"
+    html_string = html_string.replace('"mynetwork"', f'"{unique_id}"') # with quotes
+    html_string = html_string.replace("'mynetwork'", f"'{unique_id}'") # with single quotes
+    html_string = html_string.replace('id="mynetwork"', f'id="{unique_id}"')
+    net.save_graph(f"graph_{unique_id}.html")
+
+    return html_string
 
 # Simple demo to run the module directly
 if __name__ == "__main__":

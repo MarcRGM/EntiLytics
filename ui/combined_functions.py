@@ -2,6 +2,7 @@ import solara
 from features.simple_ner import identify_entities
 from features.rss_handler import fetch_rss_articles
 from features.transformer_ranking import entity_ranking
+from features.relationship_mapping import mapping
 
 text = solara.reactive("")
 continuous_update = solara.reactive(True)
@@ -16,14 +17,24 @@ def getArticles(rss_url):
 
     # Using [:3] for quick testing
     for article in fetched_articles[:3]:
+        extracted_entities = identify_entities(article['description'])
+        
+        ranking = entity_ranking(article['description'], extracted_entities)
+        
+        entity_names = [ent['name'] for ent in ranking]
+        article_graph = ""
+        # Only run it if there are at least 2 entities
+        if len(entity_names) > 1:
+            article_graph = mapping(article['description'], entity_names)
+
         temp_results.append({
             "title" : article['title'],
             "description" : article['description'],
-            "entities" : identify_entities(article['description'])
+            "entities" : extracted_entities,
+            "importance" : ranking,
+            "graph_html": article_graph
         })
 
-    # Check entity ranking of the first article for quick testing
-    entity_ranking(temp_results[0]['description'], temp_results[0]['entities'])
     
     results.set(temp_results)
     is_loading.set(False)
@@ -49,17 +60,32 @@ def ArticleListings():
                 title=f"{i}. {article['title']}", 
                 elevation=5
             ):
-                solara.Markdown(f"Description: {article['description'][:300]}...")
-                solara.Markdown(f"Entities:")
+                solara.Markdown(f"Description: {article['description']}")
+                solara.Markdown("")
+                solara.Markdown("")
+
+                solara.Markdown("Entities:")
+                solara.Markdown("")
                 # Nested loop for entities
-                with solara.Column(
-                    style={
-                        "gap": "1rem",
-                        "background-color": "#34699A",
-                    }
-                ):
-                    for ent in article['entities']:
-                        solara.Markdown(f"Entity: {ent['text']},        Label: {ent['label']},      CF: {ent['confidence']}")
+                for ent in article['entities']:
+                    solara.Markdown(f"Entity: {ent['text']},        Label: {ent['label']},      CF: {ent['confidence']}")
+                solara.Markdown("")
+                solara.Markdown("")
+                solara.Markdown("Entity Ranking (Top 5)")
+                solara.Markdown("")
+
+                for ent in article['importance']:
+                    solara.Markdown(f"Entity: {ent['name']}    |   Importance: {ent['score']:.4f}")
+
+                graph_code = article.get('graph_html')
+                
+                if graph_code:
+                    solara.Markdown("### Relationship Map:")
+                    # We wrap it in a Div to ensure it has height
+                    with solara.Div(style={"height": "520px", "width": "100%", "background-color": "#FADA7A", "border-radius": "10px"}):
+                        solara.HTML(unsafe_innerHTML=graph_code)
+                else:
+                    solara.Info("Not enough entities to map relationships.")
 
 
 @solara.component

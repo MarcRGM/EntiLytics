@@ -39,8 +39,10 @@ def entity_ranking(article_description, entity_list):
     final_rankings.sort(key=lambda x: x['score'], reverse=True)
 
     # Print results for checking
-    for entity in final_rankings[:5]:
-        print(f"Entity: {entity['name']} | Importance: {entity['score']:.4f}")
+    # for entity in final_rankings[:5]:
+        # print(f"Entity: {entity['name']} | Importance: {entity['score']:.4f}")
+
+    return final_rankings[:5]
 
     # return final_rankings[:5]
 
