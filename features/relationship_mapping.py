@@ -1,13 +1,22 @@
 import networkx as nx
+import nltk
 from pyvis.network import Network
 from itertools import combinations
+from nltk.tokenize import sent_tokenize # Split articles by sentence rather than using split('.')
+
+# nltk requirement
+try:
+    nltk.data.find('tokenizers/punkt_tab')
+except LookupError:
+    nltk.download('punkt_tab', quiet=True)
 
 def mapping(article, entities):
     # NetworkX Graph manages the logic and brain of the connections
     graph = nx.Graph()
 
     # Split by sentences to perform sentence-level analysis
-    sentences = article.split('.')
+    # nltk handles periods in abbreviations (e.g., Dr. or Inc.)
+    sentences = sent_tokenize(article)
     
     for sentence in sentences:
         clean_s = sentence.strip() # Remove extra spaces/newlines
@@ -36,7 +45,7 @@ def mapping(article, entities):
                     graph.add_edge(u, v, weight=1, evidence=[clean_s])
 
     # Interactive Visualization using PyVis
-    net = Network(height="750px", width="100%", bgcolor="#FADA7A", font_color="#1C6EA4")
+    net = Network(height="100vh", width="100%", bgcolor="#FADA7A", font_color="#1C6EA4")
 
     # Iterate through the NetworkX edges to build the Pyvis map
     for u, v, data in graph.edges(data=True): # True gives the custom attributes from graph
