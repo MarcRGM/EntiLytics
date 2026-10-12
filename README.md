@@ -30,7 +30,7 @@ Given a news article, the system will:
 | -------------------- | -------------------------------------------------------------------------- |
 | UI Framework         | [Solara](https://solara.dev) (Python-based reactive web UI)                |
 | NER Model            | [Flair](https://github.com/flairNLP/flair) (BiLSTM, trained on CoNLL-2003) |
-| Importance Ranking & Extractive Summarization   | Pretrained transformer model (Hugging Face Transformers)                   |
+| Importance Ranking & Extractive Summarization   | SentenceTransformers                   |
 | Relationship Mapping | NetworkX + Pyvis                                                           |
 | Database             | PostgreSQL (Azure Flexible Server)                                         |
 | ORM                  | SQLAlchemy                                                                 |
