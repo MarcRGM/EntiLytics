@@ -6,6 +6,8 @@
 
 Live site: Currently Offline - AWS Student Credits Expired
 
+https://github.com/user-attachments/assets/ad3415fa-e15f-4b2d-a1b7-0146467e2396
+
 ---
 
 ## What It Does
@@ -15,8 +17,8 @@ Reading news articles often means sorting through large amounts of text to find 
 Given a news article, the system will:
 
 1. **Extract entities** (persons, organizations, locations, and miscellaneous) using a pretrained BiLSTM Named Entity Recognition model via the Flair NLP library
-2. **Rank entities by importance** using a pretrained transformer model that weighs each entity's position in the text, mention frequency, and contextual relevance
-3. **Map relationships** between entities by detecting which entities appear together within the same sentence, then visualizing the result as an interactive network graph
+2. **Rank entities by importance** using a SentenceTransformers model that weighs each entity's position in the text and contextual relevance
+3. **Map relationships** between entities by detecting which entities appear together within the same sentence, then visualizing the result as an interactive network graph using NetworkX and Pyvis
 4. **Generate a summary** using extractive summarization, selecting the sentences most relevant to the top-ranked entities
 5. **Store and annotate** articles and analysis results per user account, with personal notes saved to a database
 
@@ -52,3 +54,4 @@ This system was developed as a thesis project for the degree of **Bachelor of Sc
 - Session persistence on page refresh is under active development
 - The system does not perform fact-checking or verify the credibility of news sources
 - Internet connectivity is required for pretrained model access and RSS feed retrieval
+- Longer articles require extended processing time
