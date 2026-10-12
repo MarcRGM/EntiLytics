@@ -4,7 +4,7 @@
 
 > A web-based platform that automatically identifies, ranks, and visualizes named entities in news articles to support efficient news comprehension.
 
-Live site: Currently Offline - AWS Student Credits Expired
+Live site: Currently Offline - Azure Student Credits Expired
 
 https://github.com/user-attachments/assets/ad3415fa-e15f-4b2d-a1b7-0146467e2396
 
