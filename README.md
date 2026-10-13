@@ -8,8 +8,6 @@ Live site: Currently Offline - Azure Student Credits Expired
 
 https://github.com/user-attachments/assets/ad3415fa-e15f-4b2d-a1b7-0146467e2396
 
-[![Architecture diagram of marcrgm/entilytics](https://gitdiagram.com/marcrgm/entilytics/diagram.png)](https://gitdiagram.com/marcrgm/entilytics?utm_source=readme&utm_medium=picture)
-
 ---
 
 ## What It Does
@@ -23,6 +21,8 @@ Given a news article, the system will:
 3. **Map relationships** between entities by detecting which entities appear together within the same sentence, then visualizing the result as an interactive network graph using NetworkX and Pyvis
 4. **Generate a summary** using extractive summarization, selecting the sentences most relevant to the top-ranked entities
 5. **Store and annotate** articles and analysis results per user account, with personal notes saved to a database
+
+[![Architecture diagram of marcrgm/entilytics](https://gitdiagram.com/marcrgm/entilytics/diagram.png)](https://gitdiagram.com/marcrgm/entilytics?utm_source=readme&utm_medium=picture)
 
 ---
 
