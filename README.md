@@ -8,6 +8,8 @@ Live site: Currently Offline - Azure Student Credits Expired
 
 https://github.com/user-attachments/assets/ad3415fa-e15f-4b2d-a1b7-0146467e2396
 
+[![Architecture diagram of marcrgm/entilytics](https://gitdiagram.com/marcrgm/entilytics/diagram.png)](https://gitdiagram.com/marcrgm/entilytics?utm_source=readme&utm_medium=picture)
+
 ---
 
 ## What It Does
